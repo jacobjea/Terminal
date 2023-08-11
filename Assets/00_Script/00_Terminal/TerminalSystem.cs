@@ -1,7 +1,7 @@
 /********************************************************************************/
 // 작성일 : 2023.02.17
-// 작성자 : -
-// 설  명 : 
+// 작성자 : - 제승욱
+// 설  명 : 초기설정 및 주 기능 클레스 관리하는 메인 클레스
 /********************************************************************************/
 // 수정일     | 종류 | 수정자 | 내용
 // 2023.02.17 | ADD  | 작성자 | 신규 작성
@@ -16,16 +16,24 @@ using TMPro;
 using UnityEngine;
 
 
-namespace Mammossix.Galaxity.Terminal
+namespace Terminal
 {
-    public static class SuggestionSystem
+    public static class TerminalSystem
     {
+        private static TerminalFunc terminalFunc;
+        public static TerminalFunc TerminalFunc => terminalFunc;
+
+        private static UI_Terminal ui_Terminal;
+        public static UI_Terminal UI_Termianl { get { return ui_Terminal; } set { ui_Terminal = value; } }
+     
+
 #if (UNITY_EDITOR)
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        public static void OpenUI()
+        public static void Init()
         {
-            GameObject obj = new GameObject("TerminalSystem");
-            obj.AddComponent<TerminalFunc>();
+            GameObject terminalSystem = new GameObject("TerminalSystem");
+            terminalFunc = terminalSystem.AddComponent<TerminalFunc>();
+            terminalFunc.Init();
         }
 #endif
     }

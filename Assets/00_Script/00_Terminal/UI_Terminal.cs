@@ -16,12 +16,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Mammossix.Galaxity.Terminal
+namespace Terminal
 {
     public class UI_Terminal : MonoBehaviour
     {
-        TerminalFunc terminalFunc;
-
         [SerializeField] TMP_InputField inputField;
         public TMP_InputField InputField => inputField;
 
@@ -39,14 +37,9 @@ namespace Mammossix.Galaxity.Terminal
         string debugLogColor = "#76F416";
         string errorLogColor = "D02222";
 
-        private void Awake()
-        {
-            terminalFunc = GetComponentInParent<TerminalFunc>();
-
-        }
         void Start()
         {
-            suggestionScroll.CreateItem(TerminalFunc.Instance.methodList);
+            suggestionScroll.CreateItem(TerminalSystem.TerminalFunc.methodList);
             LayoutRebuilder.ForceRebuildLayoutImmediate(scrollView.content);
 
             inputField.onValueChanged.AddListener(Changed);
@@ -57,7 +50,7 @@ namespace Mammossix.Galaxity.Terminal
             suggestionScroll.SortSuggestion(value);
         }
 
-        public void Open()
+        public void ActiveToggle()
         {
             gameObject.SetActive(!gameObject.activeSelf);
 

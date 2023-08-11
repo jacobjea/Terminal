@@ -15,7 +15,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Mammossix.Galaxity.Terminal
+namespace Terminal
 {
     public class SuggestionScroll : MonoBehaviour
     {
@@ -44,8 +44,8 @@ namespace Mammossix.Galaxity.Terminal
 
         private void HandleEventItemOnSubmit(SuggestionItem item)
         {
-            TerminalFunc.Instance.CallFunctionByName(item.methodInfo.Name);
-            TerminalFunc.Instance.ui_terminal.ClearInputField();
+            TerminalSystem.TerminalFunc.CallFunctionByName(item.methodInfo.Name);
+            TerminalSystem.UI_Termianl.ClearInputField();
 
             gameObject.SetActive(false);
 
@@ -63,32 +63,19 @@ namespace Mammossix.Galaxity.Terminal
             eventItemOnSelect?.Invoke(item);
         }
 
-        void Start()
-        {
-            //for (int i = 0; i < TerminalFunc.Instance.methodList.Count; i++)
-            //{
-            //    var item = Instantiate(suggestionItem, scrollview.content.transform).GetComponent<SuggestionItem>().Init(TerminalFunc.Instance.methodList[i]);
-            //    item.OnSelectEvent.AddListener((suggestionItem) => { HandleEventItemOnSelect(item); });
-            //    item.OnClickEvent.AddListener((suggestionItem) => { HandleEventItemOnClick(item); });
-            //    item.OnSubmitEvent.AddListener((suggestionItem) => { HandleEventItemOnSubmit(item); });
-            //    item.name = item.name + i;
-            //    suggestionItems.Add(item);
-            //}
-            //InitNavigation();
-        }
-
         public void CreateItem(List<MethodInfo> methodInfo)
         {
             for (int i = 0; i < methodInfo.Count; i++)
             {
-                var item = Instantiate(suggestionItem, scrollview.content.transform).GetComponent<SuggestionItem>().Init(TerminalFunc.Instance.methodList[i]);
+                var item = Instantiate(suggestionItem, scrollview.content.transform).GetComponent<SuggestionItem>().Init(TerminalSystem.TerminalFunc.methodList[i]);
                 item.OnSelectEvent.AddListener((suggestionItem) => { HandleEventItemOnSelect(item); });
                 item.OnClickEvent.AddListener((suggestionItem) => { HandleEventItemOnClick(item); });
                 item.OnSubmitEvent.AddListener((suggestionItem) => { HandleEventItemOnSubmit(item); });
                 item.name = item.name + i;
                 suggestionItems.Add(item);
             }
-            InitNavigation();
+
+                InitNavigation();
         }
 
         public void SelectChild(int index)
@@ -105,7 +92,10 @@ namespace Mammossix.Galaxity.Terminal
        
         private void InitNavigation()
         {
-            Button button;
+            // 등록된 함수가 없다면 정렬하지 않음
+            if (suggestionItems.Count == 0) return;
+
+                Button button;
             Navigation navigation;
 
             for (int i = 0; i < scrollview.content.childCount; i++)
@@ -119,11 +109,11 @@ namespace Mammossix.Galaxity.Terminal
                 button.navigation = navigation;
             }
 
-            var field = TerminalFunc.Instance.ui_terminal.InputField;
+            var field = TerminalSystem.UI_Termianl.InputField;
 
-            navigation = TerminalFunc.Instance.ui_terminal.InputField.navigation;
+            navigation = TerminalSystem.UI_Termianl.InputField.navigation;
             navigation.selectOnDown = scrollview.content.GetChild(0).GetComponent<Selectable>();
-            TerminalFunc.Instance.ui_terminal.InputField.navigation = navigation;
+            TerminalSystem.UI_Termianl.InputField.navigation = navigation;
         }
 
         private Selectable GetNaviGationUp(int indexCurrent, int totalCount)
@@ -155,8 +145,6 @@ namespace Mammossix.Galaxity.Terminal
 
             return item.GetComponent<Selectable>();
         }
-
-        
 
         private int LevenshteinDistance(string s, string t)
         {
@@ -207,8 +195,6 @@ namespace Mammossix.Galaxity.Terminal
         {
             scrollview.gameObject.SetActive(value.Length != 0);
 
-            //var matchingWords = terminalFunc.wordList.Where(w => w.StartsWith(value, StringComparison.OrdinalIgnoreCase));
-            //var matchingWords = terminalFunc.wordList.ToList();
             Dictionary<SuggestionItem, int> methodToDistance = new Dictionary<SuggestionItem, int>();
 
             foreach (var item in suggestionItems)
@@ -220,7 +206,6 @@ namespace Mammossix.Galaxity.Terminal
                 int distance = LevenshteinDistance(value, wordLower);
                 methodToDistance.Add(item, distance);
             }
-            //var orderByDic = methodToDistance.OrderByDescending(x => x.Key.methodInfo.Name.StartsWith(value, StringComparison.OrdinalIgnoreCase) ? 0 : 1).OrderByDescending(x => x.Value);
             var orderByDic = methodToDistance.OrderBy(x => x.Key.methodInfo.Name.StartsWith(value, StringComparison.OrdinalIgnoreCase) ? 0 : 1).ThenBy(x => x.Value);
 
             int index = 0;
@@ -242,11 +227,6 @@ namespace Mammossix.Galaxity.Terminal
         private void OnEnable()
         {
             DelaySelectChild(0);
-        }
-
-        private void OnDisable()
-        {
-
         }
     }
 }

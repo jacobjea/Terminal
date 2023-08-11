@@ -150,15 +150,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 282203496477945171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a8727c5e722f2b4d82c944402d155bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 54bcec2a7f88aa34b812baae432a84d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputField: {fileID: 4034461027967672577}
   logText: {fileID: 6548844984251935023}
   scrollView: {fileID: 4120870643328566888}
   suggestionScroll: {fileID: 7638178204035605627}
-  suggestionItem: {fileID: 961398938976272711, guid: 30ce4b2639f55bb4893d24a151b5d060,
-    type: 3}
+  suggestionItem: {fileID: 961398938976272711, guid: 183f9533a575bf24da053d541961f764, type: 3}
 --- !u!1 &435606067126108958
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,9 +630,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <size=40>--------Enter the name of the function you want.------</size>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3d5e3d802983dd243bb041f55ee72187, type: 2}
-  m_sharedMaterial: {fileID: -8647173583971083985, guid: 3d5e3d802983dd243bb041f55ee72187,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1114,9 +1112,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3d5e3d802983dd243bb041f55ee72187, type: 2}
-  m_sharedMaterial: {fileID: -8647173583971083985, guid: 3d5e3d802983dd243bb041f55ee72187,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1431,12 +1428,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8175855086340946665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0977a96b05336604e970fe7ce1ecfa7d, type: 3}
+  m_Script: {fileID: 11500000, guid: c830e9717970007489f0d3c89ac7f55c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   scrollview: {fileID: 2880297228002036712}
-  suggestionItem: {fileID: 961398938976272711, guid: 30ce4b2639f55bb4893d24a151b5d060,
-    type: 3}
+  suggestionItem: {fileID: 961398938976272711, guid: 183f9533a575bf24da053d541961f764, type: 3}
   eventItemClicked:
     m_PersistentCalls:
       m_Calls: []
@@ -1455,12 +1451,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8175855086340946665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59805747e0705794ea08a3a48c055945, type: 3}
+  m_Script: {fileID: 11500000, guid: 34dff00cb44e8334484e2d6ee3eee3f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _viewportRectTransform: {fileID: 8227764297174738031}
   _content: {fileID: 8457346786724383554}
-  _transitionDuration: 0.1
+  _transitionDuration: 0.2
 --- !u!1 &8363705258038439564
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,9 +1526,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '  input command'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3d5e3d802983dd243bb041f55ee72187, type: 2}
-  m_sharedMaterial: {fileID: -8647173583971083985, guid: 3d5e3d802983dd243bb041f55ee72187,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
