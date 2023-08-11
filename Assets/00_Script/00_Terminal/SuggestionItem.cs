@@ -72,7 +72,6 @@ public class SuggestionItem : MonoBehaviour, ISelectHandler, IPointerClickHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
-
         onClickEvent.Invoke(this);
     }
     public void OnSelect(BaseEventData eventData)
