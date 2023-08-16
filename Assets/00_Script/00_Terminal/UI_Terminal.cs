@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -43,6 +44,12 @@ namespace Terminal
             LayoutRebuilder.ForceRebuildLayoutImmediate(scrollView.content);
 
             inputField.onValueChanged.AddListener(Changed);
+
+            if(FindObjectOfType<EventSystem>() == null)
+            {
+                GameObject go = new GameObject("EventSystem");
+                go.AddComponent<EventSystem>();
+            }
         }
      
         public void Changed(string value)
