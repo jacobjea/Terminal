@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -36,7 +37,8 @@ namespace Terminal
         GameObject suggestionItem;
 
         string debugLogColor = "#76F416";
-        string errorLogColor = "D02222";
+        string errorLogColor = "#D02222";
+        string infoLogColor = "#FF7D15";
 
         void Start()
         {
@@ -44,12 +46,6 @@ namespace Terminal
             LayoutRebuilder.ForceRebuildLayoutImmediate(scrollView.content);
 
             inputField.onValueChanged.AddListener(Changed);
-
-            if(FindObjectOfType<EventSystem>() == null)
-            {
-                GameObject go = new GameObject("EventSystem");
-                go.AddComponent<EventSystem>();
-            }
         }
      
         public void Changed(string value)
@@ -80,15 +76,18 @@ namespace Terminal
             scrollView.verticalScrollbar.value = 0;
         }
 
-        public void InsertLog(string logMessage)
-        {
-            logText.text += $"\n<color={debugLogColor}>{logMessage}</color>";
-            ResetScroll();
-        }
 
-        public void InsertError(string logMessage)
+
+        public void InsertLog(string logMessage, LOG_TYPE logType)
         {
-            logText.text += $"\n<color={errorLogColor}>{logMessage}</color>";
+            string logColor = logType switch 
+            {
+                LOG_TYPE.DEBUG => debugLogColor, 
+                LOG_TYPE.ERROR => errorLogColor,
+                LOG_TYPE.INFO => infoLogColor,
+                _ => debugLogColor 
+            };
+            logText.text += $"\n<color={logColor}>{logMessage}</color>";
             ResetScroll();
         }
 

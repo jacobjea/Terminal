@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Text;
 
 public class TerminalFunc : MonoBehaviour
 {
@@ -30,12 +31,20 @@ public class TerminalFunc : MonoBehaviour
 
         // 함수이름으로 등록
         RegisterFunc(nameof(TestDebug));
+        RegisterFunc(nameof(TestParameterFunc));
     }
 
     #region Func
     private void TestDebug()
     {
         Debug.Log("Test Call Func");
+    }
+
+    private void TestParameterFunc(string teststring, int testInt, float testFloat)
+    {
+        Debug.Log(teststring);
+        Debug.Log(testInt);
+        Debug.Log(testFloat);
     }
 
     private void GetCurrentTime()
@@ -59,22 +68,38 @@ public class TerminalFunc : MonoBehaviour
         {
             InsertLog($"Called {funcName}();. . .");
             MethodInfo method = typeof(TerminalFunc).GetMethod(funcName, BindingFlags.NonPublic | BindingFlags.Instance);
-            method.Invoke(this, null);
+
+            // 파라미터가 없다면 바로 함수 호출
+            if(method.GetParameters() == null)
+            {
+                method.Invoke(this, null);
+            }
+            else
+            {
+                StringBuilder parameterInfoLogText = new StringBuilder();
+                ParameterInfo[] parameterInfos = method.GetParameters();
+                foreach (var parameterInfo in parameterInfos)
+                {
+                    parameterInfoLogText.Append($"{parameterInfo.Name} ");
+
+                    //Debug.Log("ParamterName : " + parameterInfo.Name);
+                    //Debug.Log("ParameterType : " + parameterInfo.ParameterType);
+                }
+                InsertLog(parameterInfoLogText.ToString());
+
+                object[] newParam = new object[]{ "testSTring", 12, 18.5f };
+                method.Invoke(this, newParam);
+            }
         }
         else
         {
-            TerminalSystem.UI_Termianl.InsertError($"No such function exists : {funcName}");
+            TerminalSystem.UI_Termianl.InsertLog($"No such function exists : {funcName}",LOG_TYPE.ERROR);
         }
     }
 
     private void InsertLog(string log)
     {
-        TerminalSystem.UI_Termianl.InsertLog(log);
-    }
-
-    private void InsertError(string error)
-    {
-        TerminalSystem.UI_Termianl.InsertError(error);
+        TerminalSystem.UI_Termianl.InsertLog(log,LOG_TYPE.ERROR);
     }
 
     private void Update()
