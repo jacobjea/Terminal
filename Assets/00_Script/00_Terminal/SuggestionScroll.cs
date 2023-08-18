@@ -45,7 +45,6 @@ namespace Terminal
         private void HandleEventItemOnSubmit(SuggestionItem item)
         {
             TerminalSystem.TerminalFunc.CallFunctionByName(item.methodInfo.Name);
-            TerminalSystem.UI_Termianl.ClearInputField();
 
             gameObject.SetActive(false);
 
@@ -55,7 +54,6 @@ namespace Terminal
         private void HandleEventItemOnClick(SuggestionItem item)
         {
             TerminalSystem.TerminalFunc.CallFunctionByName(item.methodInfo.Name);
-            TerminalSystem.UI_Termianl.ClearInputField();
 
             gameObject.SetActive(false);
             eventItemClicked?.Invoke(item);

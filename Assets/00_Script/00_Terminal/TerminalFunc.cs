@@ -32,6 +32,7 @@ public class TerminalFunc : MonoBehaviour
         // 함수이름으로 등록
         RegisterFunc(nameof(TestDebug));
         RegisterFunc(nameof(TestParameterFunc));
+        RegisterFunc(nameof(TestParamterIntFunc));
     }
 
     #region Func
@@ -40,16 +41,21 @@ public class TerminalFunc : MonoBehaviour
         Debug.Log("Test Call Func");
     }
 
-    private void TestParameterFunc(string teststring, int testInt, float testFloat)
+    private void TestParameterFunc(string teststring, int tentstInt, float testFloat)
     {
         Debug.Log(teststring);
-        Debug.Log(testInt);
+        Debug.Log(tentstInt);
         Debug.Log(testFloat);
+    }
+
+    private void TestParamterIntFunc(int testInt)
+    {
+        Debug.Log(testInt);
     }
 
     private void GetCurrentTime()
     {
-        InsertLog(DateTime.Now.ToString());
+        InsertLog(DateTime.Now.ToString(), LOG_TYPE.DEBUG);
     }
     #endregion
 
@@ -66,40 +72,43 @@ public class TerminalFunc : MonoBehaviour
 
         if (methodList.Any(x => x.Name == funcName))
         {
-            InsertLog($"Called {funcName}();. . .");
-            MethodInfo method = typeof(TerminalFunc).GetMethod(funcName, BindingFlags.NonPublic | BindingFlags.Instance);
-
+            MethodInfo methodInfo = methodList.FirstOrDefault(x => x.Name == funcName);
+            ParameterInfo[] parameters = methodInfo.GetParameters();
             // 파라미터가 없다면 바로 함수 호출
-            if(method.GetParameters() == null)
+            if(parameters.Length == 0)
             {
-                method.Invoke(this, null);
+                InvokeMethod(methodInfo, null);
+                TerminalSystem.UI_Termianl.ClearInputField();
             }
             else
             {
-                StringBuilder parameterInfoLogText = new StringBuilder();
-                ParameterInfo[] parameterInfos = method.GetParameters();
-                foreach (var parameterInfo in parameterInfos)
-                {
-                    parameterInfoLogText.Append($"{parameterInfo.Name} ");
+                //StringBuilder parameterInfoLogText = new StringBuilder();
+                //parameterInfoLogText.Append("       ");
 
-                    //Debug.Log("ParamterName : " + parameterInfo.Name);
-                    //Debug.Log("ParameterType : " + parameterInfo.ParameterType);
-                }
-                InsertLog(parameterInfoLogText.ToString());
+                //foreach (var parameterInfo in methodInfo.GetParameters())
+                //    parameterInfoLogText.Append($"{parameterInfo.Name} ");
 
-                object[] newParam = new object[]{ "testSTring", 12, 18.5f };
-                method.Invoke(this, newParam);
+                //InsertLog(parameterInfoLogText.ToString(), LOG_TYPE.INFO);
+
+
+                TerminalSystem.UI_Termianl.Mode = INPUT_MODE.PARAMETER;
+                TerminalSystem.UI_Termianl.SetParameterMode(methodInfo);
             }
         }
         else
         {
-            TerminalSystem.UI_Termianl.InsertLog($"No such function exists : {funcName}",LOG_TYPE.ERROR);
+            InsertLog($"No such function exists : {funcName}",LOG_TYPE.ERROR);
         }
     }
 
-    private void InsertLog(string log)
+    public void InvokeMethod(MethodInfo methodInfo, object[] parameter)
     {
-        TerminalSystem.UI_Termianl.InsertLog(log,LOG_TYPE.ERROR);
+        methodInfo?.Invoke(this, parameter);
+        InsertLog($"Called {methodInfo.Name}();. . .", LOG_TYPE.DEBUG);
+    }
+    private void InsertLog(string log, LOG_TYPE log_type)
+    {
+        TerminalSystem.UI_Termianl.InsertLog(log, log_type);
     }
 
     private void Update()

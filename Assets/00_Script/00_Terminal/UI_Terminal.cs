@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,44 +23,121 @@ namespace Terminal
 {
     public class UI_Terminal : MonoBehaviour
     {
-        [SerializeField] TMP_InputField inputField;
-        public TMP_InputField InputField => inputField;
+        [SerializeField] TMP_InputField searchFuncInputField;
+        [SerializeField] TMP_InputField parameterInputField;
 
-        [SerializeField] TextMeshProUGUI logText;
+        [SerializeField] GameObject parameterArea;
+        [SerializeField] TMP_Text parameterNameText;
+        public TMP_InputField InputField => searchFuncInputField;
+
+        [SerializeField] TMP_Text logText;
         [SerializeField] ScrollRect scrollView;
 
         [SerializeField]
         SuggestionScroll suggestionScroll;
 
+        const string debugLogColor = "#76F416";
+        const string errorLogColor = "#D02222";
+        const string infoLogColor = "#9CDCFE";
 
-        [Header("Prefeb")]
-        [SerializeField]
-        GameObject suggestionItem;
+        INPUT_MODE mode = INPUT_MODE.SUGGESTION;
+        public INPUT_MODE Mode 
+        {
+            get => mode;
+            set
+            {
+                mode = value;
+                searchFuncInputField.text = "";
+                parameterInputField.text = "";
+                searchFuncInputField.gameObject.SetActive(mode == INPUT_MODE.SUGGESTION);
+                parameterArea.SetActive(mode == INPUT_MODE.PARAMETER);
+                if (mode == INPUT_MODE.SUGGESTION) searchFuncInputField.ActivateInputField();
+                if (mode == INPUT_MODE.PARAMETER) parameterInputField.ActivateInputField();
+            }
+        }
 
-        string debugLogColor = "#76F416";
-        string errorLogColor = "#D02222";
-        string infoLogColor = "#FF7D15";
+        MethodInfo currentMethodInfo;
+        ParameterInfo currentParameterInfo;
+
+        Queue<ParameterInfo> parameterInfoQueue = new Queue<ParameterInfo>();
+        List<object> parameterValueList = new List<object>();
 
         void Start()
         {
             suggestionScroll.CreateItem(TerminalSystem.TerminalFunc.methodList);
             LayoutRebuilder.ForceRebuildLayoutImmediate(scrollView.content);
 
-            inputField.onValueChanged.AddListener(Changed);
+            searchFuncInputField.onValueChanged.AddListener(OnSearchFuncInputFieldEvent);
+            parameterInputField.onSubmit.AddListener(OnParameterInputFieldEvent);
         }
-     
-        public void Changed(string value)
+
+        private void OnSearchFuncInputFieldEvent(string value)
         {
             suggestionScroll.SortSuggestion(value);
+        }
+
+
+        private void OnParameterInputFieldEvent(string value)
+        {
+            if (value == "") return;
+            try
+            {
+                object conversionValue = Convert.ChangeType(value, currentParameterInfo.ParameterType);
+                parameterValueList.Add(conversionValue);
+                InsertLog($"{currentParameterInfo.Name} : {value}",LOG_TYPE.INFO);
+            }
+            catch 
+            {
+                InsertLog($"Type conversion is not possible. Check the type.({value})", LOG_TYPE.ERROR);
+                parameterInputField.text = "";
+                parameterInputField.ActivateInputField();
+                return;
+            }
+
+            if (parameterValueList.Count == currentMethodInfo.GetParameters().Length)
+            {
+                TerminalSystem.TerminalFunc.InvokeMethod(currentMethodInfo, parameterValueList.ToArray());
+                Mode = INPUT_MODE.SUGGESTION;
+            }
+            else
+            {
+                SetNextParameter();
+            }
+        }
+        
+        public void SetParameterMode(MethodInfo targetMethodInfo)
+        {
+            currentMethodInfo = targetMethodInfo;
+            parameterInfoQueue.Clear();
+            parameterValueList.Clear();
+
+            StringBuilder parameterInfoLogText = new StringBuilder();
+            parameterInfoLogText.Append($"Parameter : ");
+
+            foreach (var parameterInfo in targetMethodInfo.GetParameters())
+            {
+                parameterInfoQueue.Enqueue(parameterInfo);
+                parameterInfoLogText.Append($"{parameterInfo.Name}, ");
+            }
+
+            InsertLog(parameterInfoLogText.ToString().TrimEnd(", "), LOG_TYPE.INFO);
+            SetNextParameter();
+        }
+
+        public void SetNextParameter()
+        {
+            currentParameterInfo = parameterInfoQueue.Dequeue();
+            parameterNameText.text = currentParameterInfo.Name;
+            parameterInputField.text = "";
+            parameterInputField.ActivateInputField();
         }
 
         public void ActiveToggle()
         {
             gameObject.SetActive(!gameObject.activeSelf);
 
-
-            inputField.ActivateInputField();
-            inputField.text = "";
+            searchFuncInputField.ActivateInputField();
+            searchFuncInputField.text = "";
 
             suggestionScroll.gameObject.SetActive(false);
         }
@@ -76,8 +154,6 @@ namespace Terminal
             scrollView.verticalScrollbar.value = 0;
         }
 
-
-
         public void InsertLog(string logMessage, LOG_TYPE logType)
         {
             string logColor = logType switch 
@@ -93,21 +169,29 @@ namespace Terminal
 
         public void ClearInputField()
         {
-            inputField.text = "";
-            inputField.ActivateInputField();
+            searchFuncInputField.text = "";
+            searchFuncInputField.ActivateInputField();
         }
 
         private void Update()
         {
-            if (inputField.isFocused && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)))
+            if (searchFuncInputField.isFocused && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)))
             {
                 suggestionScroll.gameObject.SetActive(true);
-                inputField.DeactivateInputField();
+                searchFuncInputField.DeactivateInputField();
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                inputField.ActivateInputField();
-                suggestionScroll.gameObject.SetActive(false);
+                if(mode == INPUT_MODE.SUGGESTION)
+                {
+                    searchFuncInputField.ActivateInputField();
+                    suggestionScroll.gameObject.SetActive(false);
+                }
+                else if(mode == INPUT_MODE.PARAMETER)
+                {
+                    Mode = INPUT_MODE.SUGGESTION;
+                }
+                
             }
         }
     }

@@ -10,5 +10,11 @@ namespace Terminal
         ERROR,
         INFO,   
     }
+
+    public enum INPUT_MODE
+    {
+        SUGGESTION,
+        PARAMETER,
+    }
 }
 
