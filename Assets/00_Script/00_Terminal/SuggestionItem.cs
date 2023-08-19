@@ -16,7 +16,7 @@ using UnityEngine.EventSystems;
 
 public class SuggestionItem : MonoBehaviour, ISelectHandler, IPointerClickHandler, ISubmitHandler
 {
-    public MethodInfo methodInfo;
+    public MethodInfo myMethodInfo;
 
     [SerializeField]
     TextMeshProUGUI methodNameText;
@@ -50,10 +50,15 @@ public class SuggestionItem : MonoBehaviour, ISelectHandler, IPointerClickHandle
 
     
 
-    public SuggestionItem Init(MethodInfo _methodInfo)
+    public SuggestionItem Init(MethodInfo methodInfo)
     {
-        methodInfo = _methodInfo;
-        methodNameText.text = _methodInfo.Name;
+        myMethodInfo = methodInfo;
+
+        // 매개변수가 있는 경우 *표시
+        if (myMethodInfo.GetParameters().Length == 0)
+            methodNameText.text = methodInfo.Name;
+        else
+            methodNameText.text = methodInfo.Name + "*";
 
         gameObject.SetActive(true);
         return this;

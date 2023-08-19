@@ -44,7 +44,7 @@ namespace Terminal
 
         private void HandleEventItemOnSubmit(SuggestionItem item)
         {
-            TerminalSystem.TerminalFunc.CallFunctionByName(item.methodInfo.Name);
+            TerminalSystem.TerminalFunc.CallFunctionByName(item.myMethodInfo.Name);
 
             gameObject.SetActive(false);
 
@@ -53,7 +53,7 @@ namespace Terminal
 
         private void HandleEventItemOnClick(SuggestionItem item)
         {
-            TerminalSystem.TerminalFunc.CallFunctionByName(item.methodInfo.Name);
+            TerminalSystem.TerminalFunc.CallFunctionByName(item.myMethodInfo.Name);
 
             gameObject.SetActive(false);
             eventItemClicked?.Invoke(item);
@@ -202,13 +202,13 @@ namespace Terminal
             foreach (var item in suggestionItems)
             {
                 value = value.ToLower();
-                string wordLower = item.methodInfo.Name.ToLower();
+                string wordLower = item.myMethodInfo.Name.ToLower();
 
                 // 단어의 거리 계산
                 int distance = LevenshteinDistance(value, wordLower);
                 methodToDistance.Add(item, distance);
             }
-            var orderByDic = methodToDistance.OrderBy(x => x.Key.methodInfo.Name.StartsWith(value, StringComparison.OrdinalIgnoreCase) ? 0 : 1).ThenBy(x => x.Value);
+            var orderByDic = methodToDistance.OrderBy(x => x.Key.myMethodInfo.Name.StartsWith(value, StringComparison.OrdinalIgnoreCase) ? 0 : 1).ThenBy(x => x.Value);
 
             int index = 0;
             foreach (var dic in orderByDic)

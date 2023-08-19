@@ -112,7 +112,7 @@ namespace Terminal
             parameterValueList.Clear();
 
             StringBuilder parameterInfoLogText = new StringBuilder();
-            parameterInfoLogText.Append($"Parameter : ");
+            parameterInfoLogText.Append($"\nParameter : ");
 
             foreach (var parameterInfo in targetMethodInfo.GetParameters())
             {
@@ -136,10 +136,14 @@ namespace Terminal
         {
             gameObject.SetActive(!gameObject.activeSelf);
 
-            searchFuncInputField.ActivateInputField();
-            searchFuncInputField.text = "";
+            if(gameObject.activeSelf == true)
+            {
+                Mode = INPUT_MODE.SUGGESTION;
+                //searchFuncInputField.ActivateInputField();
+                //searchFuncInputField.text = "";
+                suggestionScroll.gameObject.SetActive(false);
+            }
 
-            suggestionScroll.gameObject.SetActive(false);
         }
 
         private void ResetScroll()
