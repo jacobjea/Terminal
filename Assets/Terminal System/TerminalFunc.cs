@@ -26,7 +26,7 @@ public class TerminalFunc : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // 터미널 생성 UI 생성
-        TerminalSystem.UI_Termianl = Instantiate(Resources.Load<GameObject>("Terminal/UI_Terminal"), transform).GetComponent<UI_Terminal>();
+        TerminalSystem.UI_Termianl = Instantiate(Resources.Load<GameObject>("UI_Terminal"), transform).GetComponent<UI_Terminal>();
         TerminalSystem.UI_Termianl.gameObject.SetActive(false);
 
         // 함수이름으로 등록
