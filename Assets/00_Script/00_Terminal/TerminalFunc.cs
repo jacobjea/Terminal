@@ -57,6 +57,7 @@ public class TerminalFunc : MonoBehaviour
     {
         InsertLog(DateTime.Now.ToString(), LOG_TYPE.DEBUG);
     }
+
     #endregion
 
 
@@ -82,15 +83,6 @@ public class TerminalFunc : MonoBehaviour
             }
             else
             {
-                //StringBuilder parameterInfoLogText = new StringBuilder();
-                //parameterInfoLogText.Append("       ");
-
-                //foreach (var parameterInfo in methodInfo.GetParameters())
-                //    parameterInfoLogText.Append($"{parameterInfo.Name} ");
-
-                //InsertLog(parameterInfoLogText.ToString(), LOG_TYPE.INFO);
-
-
                 TerminalSystem.UI_Termianl.Mode = INPUT_MODE.PARAMETER;
                 TerminalSystem.UI_Termianl.SetParameterMode(methodInfo);
             }
