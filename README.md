@@ -1,1 +1,1 @@
-<font size="30">Terminal System </font>
+<font size="60">Terminal System </font>
