@@ -17,121 +17,126 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Text;
 
-public class TerminalFunc : MonoBehaviour
+
+namespace Terminal
 {
-    public List<MethodInfo> methodList = new List<MethodInfo>();
-
-    public void Init()
+    public class TerminalFunc : MonoBehaviour
     {
-        DontDestroyOnLoad(gameObject);
+        public List<MethodInfo> methodList = new List<MethodInfo>();
 
-        // 터미널 생성 UI 생성
-        TerminalSystem.UI_Termianl = Instantiate(Resources.Load<GameObject>("UI_Terminal"), transform).GetComponent<UI_Terminal>();
-        TerminalSystem.UI_Termianl.gameObject.SetActive(false);
-
-        Type terminalFunc = typeof(TerminalFunc);
-        MethodInfo[] methods = terminalFunc.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-        foreach (var method in methods)
+        public void Init()
         {
-            TerminalAttribute attribute = (TerminalAttribute)Attribute.GetCustomAttribute(method, typeof(TerminalAttribute));
+            DontDestroyOnLoad(gameObject);
 
-            if (attribute != null)
+            // 터미널 생성 UI 생성
+            TerminalSystem.UI_Termianl = Instantiate(Resources.Load<GameObject>("UI_Terminal"), transform).GetComponent<UI_Terminal>();
+            TerminalSystem.UI_Termianl.gameObject.SetActive(false);
+
+            Type terminalFunc = typeof(TerminalFunc);
+            MethodInfo[] methods = terminalFunc.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            foreach (var method in methods)
             {
-                methodList.Add(method);
+                TerminalAttribute attribute = (TerminalAttribute)Attribute.GetCustomAttribute(method, typeof(TerminalAttribute));
+
+                if (attribute != null)
+                {
+                    methodList.Add(method);
+                }
             }
         }
-    }
 
-    #region Func
+        #region Func
 
-    [Terminal]
-    private void TestDebug()
-    {
-        Debug.Log("Test Call Func");
-    }
-
-    [Terminal]
-    private void TestParameterFunc(string teststring, int tentstInt, float testFloat)
-    {
-        Debug.Log(teststring);
-        Debug.Log(tentstInt);
-        Debug.Log(testFloat);
-    }
-
-    [Terminal]
-    private void TestParamterIntFunc(int testInt)
-    {
-        Debug.Log(testInt);
-    }
-
-    private void GetCurrentTime()
-    {
-        InsertLog(DateTime.Now.ToString(), LOG_TYPE.DEBUG);
-    }
-
-    #endregion
-
-
-    #region Util
-    public void RegisterFunc(string methodName)
-    {
-        methodList.Add(typeof(TerminalFunc).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public));
-    }
-
-    public void CallFunctionByName(string funcName)
-    {
-        if (funcName == "") return;
-
-        if (methodList.Any(x => x.Name == funcName))
+        [Terminal]
+        private void TestDebug()
         {
-            MethodInfo methodInfo = methodList.FirstOrDefault(x => x.Name == funcName);
-            ParameterInfo[] parameters = methodInfo.GetParameters();
-            // 파라미터가 없다면 바로 함수 호출
-            if(parameters.Length == 0)
+            Debug.Log("Test Call Func");
+        }
+
+        [Terminal]
+        private void TestParameterFunc(string teststring, int tentstInt, float testFloat)
+        {
+            Debug.Log(teststring);
+            Debug.Log(tentstInt);
+            Debug.Log(testFloat);
+        }
+
+        [Terminal]
+        private void TestParamterIntFunc(int testInt)
+        {
+            Debug.Log(testInt);
+        }
+
+        private void GetCurrentTime()
+        {
+            InsertLog(DateTime.Now.ToString(), LOG_TYPE.DEBUG);
+        }
+
+        #endregion
+
+
+        #region Util
+        public void RegisterFunc(string methodName)
+        {
+            methodList.Add(typeof(TerminalFunc).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public));
+        }
+
+        public void CallFunctionByName(string funcName)
+        {
+            if (funcName == "") return;
+
+            if (methodList.Any(x => x.Name == funcName))
             {
-                InvokeMethod(methodInfo, null);
-                TerminalSystem.UI_Termianl.ClearInputField();
+                MethodInfo methodInfo = methodList.FirstOrDefault(x => x.Name == funcName);
+                ParameterInfo[] parameters = methodInfo.GetParameters();
+                // 파라미터가 없다면 바로 함수 호출
+                if (parameters.Length == 0)
+                {
+                    InvokeMethod(methodInfo, null);
+                    TerminalSystem.UI_Termianl.ClearInputField();
+                }
+                else
+                {
+                    TerminalSystem.UI_Termianl.Mode = INPUT_MODE.PARAMETER;
+                    TerminalSystem.UI_Termianl.SetParameterMode(methodInfo);
+                }
             }
             else
             {
-                TerminalSystem.UI_Termianl.Mode = INPUT_MODE.PARAMETER;
-                TerminalSystem.UI_Termianl.SetParameterMode(methodInfo);
+                InsertLog($"No such function exists : {funcName}", LOG_TYPE.ERROR);
             }
         }
-        else
-        {
-            InsertLog($"No such function exists : {funcName}",LOG_TYPE.ERROR);
-        }
-    }
 
-    public void InvokeMethod(MethodInfo methodInfo, object[] parameter)
-    {
-        methodInfo?.Invoke(this, parameter);
-        InsertLog($"Called {methodInfo.Name}();. . .", LOG_TYPE.DEBUG);
-    }
-    private void InsertLog(string log, LOG_TYPE log_type)
-    {
-        TerminalSystem.UI_Termianl.InsertLog(log, log_type);
-    }
+        public void InvokeMethod(MethodInfo methodInfo, object[] parameter)
+        {
+            methodInfo?.Invoke(this, parameter);
+            InsertLog($"Called {methodInfo.Name}();. . .", LOG_TYPE.DEBUG);
+        }
+        private void InsertLog(string log, LOG_TYPE log_type)
+        {
+            TerminalSystem.UI_Termianl.InsertLog(log, log_type);
+        }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Return))
+        private void Update()
         {
-            TerminalSystem.UI_Termianl.ActiveToggle();
+            if (Input.GetKeyDown(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Return))
+            {
+                TerminalSystem.UI_Termianl.ActiveToggle();
+            }
+            else if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Return))
+            {
+                TerminalSystem.UI_Termianl.ActiveToggle();
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftAlt) && Input.GetKey(KeyCode.KeypadEnter))
+            {
+                TerminalSystem.UI_Termianl.ActiveToggle();
+            }
+            else if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                TerminalSystem.UI_Termianl.ActiveToggle();
+            }
         }
-        else if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Return))
-        {
-            TerminalSystem.UI_Termianl.ActiveToggle();
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftAlt) && Input.GetKey(KeyCode.KeypadEnter))
-        {
-            TerminalSystem.UI_Termianl.ActiveToggle();
-        }
-        else if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            TerminalSystem.UI_Termianl.ActiveToggle();
-        }
+        #endregion
     }
-    #endregion
 }
+
