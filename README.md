@@ -26,7 +26,7 @@ Lists the functions that are most similar to the entered value first.
 Automatically generates the editor when it plays. There is no need to place anything in the scene!
 <br/><br/><br/>
 
-![image](https://github.com/jacobjea/Terminal/assets/89589209/13f74ce7-6b18-4ca3-a9fc-92cb9764a66f)
+![image](https://github.com/jacobjea/Terminal/assets/89589209/d481d522-eb6a-49b0-be2a-27e7cd0e960e)
 
 You can enable or disable the console window by typing **ALT + ENTER**
 <br/><br/><br/>
