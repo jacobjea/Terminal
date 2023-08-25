@@ -13,7 +13,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -119,8 +118,8 @@ namespace Terminal
                 parameterInfoQueue.Enqueue(parameterInfo);
                 parameterInfoLogText.Append($"{parameterInfo.Name}, ");
             }
-
-            InsertLog(parameterInfoLogText.ToString().TrimEnd(", "), LOG_TYPE.INFO);
+            parameterInfoLogText.Length = parameterInfoLogText.Length - 2;
+            InsertLog(parameterInfoLogText.ToString(), LOG_TYPE.INFO);
             SetNextParameter();
         }
 

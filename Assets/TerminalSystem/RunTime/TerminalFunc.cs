@@ -29,18 +29,28 @@ public class TerminalFunc : MonoBehaviour
         TerminalSystem.UI_Termianl = Instantiate(Resources.Load<GameObject>("UI_Terminal"), transform).GetComponent<UI_Terminal>();
         TerminalSystem.UI_Termianl.gameObject.SetActive(false);
 
-        // 함수이름으로 등록
-        RegisterFunc(nameof(TestDebug));
-        RegisterFunc(nameof(TestParameterFunc));
-        RegisterFunc(nameof(TestParamterIntFunc));
+        Type terminalFunc = typeof(TerminalFunc);
+        MethodInfo[] methods = terminalFunc.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        foreach (var method in methods)
+        {
+            TerminalAttribute attribute = (TerminalAttribute)Attribute.GetCustomAttribute(method, typeof(TerminalAttribute));
+
+            if (attribute != null)
+            {
+                methodList.Add(method);
+            }
+        }
     }
 
     #region Func
+
+    [Terminal]
     private void TestDebug()
     {
         Debug.Log("Test Call Func");
     }
 
+    [Terminal]
     private void TestParameterFunc(string teststring, int tentstInt, float testFloat)
     {
         Debug.Log(teststring);
@@ -48,6 +58,7 @@ public class TerminalFunc : MonoBehaviour
         Debug.Log(testFloat);
     }
 
+    [Terminal]
     private void TestParamterIntFunc(int testInt)
     {
         Debug.Log(testInt);
