@@ -48,30 +48,40 @@ namespace Terminal
         #region Func
 
         [Terminal]
-        private void TestDebug()
+        private void SetCubeColor(string hexValue)
         {
-            Debug.Log("Test Call Func");
+            GameObject obj =  GameObject.Find("Cube");
+
+            if (ColorUtility.TryParseHtmlString(hexValue, out Color newColor))
+            {
+                obj.GetComponent<Renderer>().material.color = newColor;
+            }
+            else
+            {
+                InsertLog("Check the hexValue!", LOG_TYPE.ERROR);
+            }
         }
 
         [Terminal]
-        private void TestParameterFunc(string teststring, int tentstInt, float testFloat)
+        private void SetCubeScale(float x, float y, float z)
         {
-            Debug.Log(teststring);
-            Debug.Log(tentstInt);
-            Debug.Log(testFloat);
+            GameObject obj =  GameObject.Find("Cube");
+            obj.transform.localScale = new Vector3(x, y, z);
         }
 
         [Terminal]
-        private void TestParamterIntFunc(int testInt)
+        private void SceneRefresh()
         {
-            Debug.Log(testInt);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        private void GetCurrentTime()
-        {
-            InsertLog(DateTime.Now.ToString(), LOG_TYPE.DEBUG);
-        }
 
+        [Terminal]
+        private void AddCubePosition(float x, float y, float z)
+        {
+            GameObject obj =  GameObject.Find("Cube");
+            obj.transform.position = new Vector3(obj.transform.position.x + x, obj.transform.position.y + y, obj.transform.position.z + z);
+        }
         #endregion
 
 
