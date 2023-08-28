@@ -5,9 +5,12 @@
 Terminal System is a tool that lets you invoke registered functions from anywhere.<br/>
 Lists the functions that are most similar to the entered value first.
 
-## Key features
-
 ## How to install
+
+![image](https://github.com/jacobjea/Terminal/assets/89589209/12177e2e-fd05-4979-9e75-ea8d57a59748)
+
+Download the project and place it under the unity **Assets** folder
+<br/><br/><br/>
 
 ## How it works
 
