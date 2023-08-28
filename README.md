@@ -4,6 +4,7 @@
 
 Terminal System is a tool that lets you invoke registered functions from anywhere.<br/>
 Lists the functions that are most similar to the entered value first.
+<br/><br/><br/>
 
 ## How to install
 
