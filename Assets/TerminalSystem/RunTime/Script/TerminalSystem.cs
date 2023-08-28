@@ -16,7 +16,7 @@ using TMPro;
 using UnityEngine;
 
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     public static class TerminalSystem
     {

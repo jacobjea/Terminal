@@ -15,7 +15,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     public class SuggestionItem : MonoBehaviour, ISelectHandler, IPointerClickHandler, ISubmitHandler
     {

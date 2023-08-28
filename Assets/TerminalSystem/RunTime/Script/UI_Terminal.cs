@@ -18,7 +18,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     public class UI_Terminal : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     public enum LOG_TYPE
     {

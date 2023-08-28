@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class TerminalAttribute : Attribute

@@ -6,7 +6,6 @@
 // 수정일     | 종류 | 수정자 | 내용
 // 2023.03.13 | ADD  | 작성자 | 신규 작성
 /********************************************************************************/
-using Terminal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ using UnityEngine.SceneManagement;
 using System.Text;
 
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     public class TerminalFunc : MonoBehaviour
     {

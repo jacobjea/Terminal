@@ -15,7 +15,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Terminal
+namespace JACOB.Terminal
 {
     public class SuggestionScroll : MonoBehaviour
     {
