@@ -8,7 +8,7 @@ Lists the functions that are most similar to the entered value first.
 
 ## How to install
 
-![image](https://github.com/jacobjea/Terminal/assets/89589209/12177e2e-fd05-4979-9e75-ea8d57a59748)
+![image](https://github.com/jacobjea/Unity-Terminal-System/assets/89589209/13950918-1e2a-414f-bd39-21d8dcd13095)
 
 Download the project and place it under the unity **Assets** folder
 <br/><br/><br/>
