@@ -11,6 +11,14 @@ Lists the functions that are most similar to the entered value first.
 
 ## How it works
 
+
+```C#
+MethodInfo[] methods = terminalFunc.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+```
+
+**TerminalSystem** uses **Reflection** to get methodinfo.
+<br/><br/><br/>
+
 ```C#
 #if (UNITY_EDITOR)
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
